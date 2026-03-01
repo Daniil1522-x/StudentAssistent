@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Дисциплины и преподаватели{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-book me-2 text-primary"></i>
+        Дисциплины и преподаватели
+    </h1>
+        <a href="{% url 'disciplines:add_discipline' %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Добавить дисциплину
+        </a>
+</div>
+
+<!-- Сообщения (если есть) -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mt-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Список дисциплин -->
+{% if disciplines %}
+    <div class="row g-4">
+        {% for name, discipline in disciplines.items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0 text-truncate">{{ name }}</h6>
+                        {% if discipline.grade %}
+                            <span class="badge bg-{% if discipline.grade >= 4 %}success{% elif discipline.grade == 3 %}warning{% else %}danger{% endif %}">
+                                {{ discipline.grade }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">
+                            <strong>Преподаватель:</strong><br>
+                            {{ discipline.teacher }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Курс:</strong> {{ discipline.course }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Часы:</strong> {{ discipline.hours }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Успеваемость:</strong><br>
+                            <span class="badge bg-{% if discipline.performance == 'Отлично' %}success
+                                           {% elif discipline.performance == 'Хорошо' %}warning
+                                           {% elif discipline.performance == 'Удовлетворительно' %}secondary
+                                           {% else %}danger{% endif %}">
+                                {{ discipline.performance|default:"Не указано" }}
+                            </span>
+                        </p>
+                        {% if discipline.notes %}
+                            <p class="text-muted small mt-2">
+                                <i class="fas fa-sticky-note me-1"></i>
+                                {{ discipline.notes|truncatechars:120 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-end">
+                        <small class="text-muted">
+                            Обновлено: {{ discipline.updated_at|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-light border text-center py-5 my-5">
+        <i class="fas fa-book-open fa-3x text-muted mb-3 d-block"></i>
+        <h4 class="text-muted">Список дисциплин пуст</h4>
+        <p class="lead text-muted">Добавьте свои предметы и преподавателей</p>
+    </div>
+{% endif %}
+
+<!-- Модальное окно добавления дисциплины -->
+<div class="modal fade" id="addDisciplineModal" tabindex="-1" aria-labelledby="addDisciplineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDisciplineModalLabel">Добавить дисциплину</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addDisciplineForm" method="post" action="{% url 'disciplines:add_discipline' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Название дисциплины</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher" class="form-label">Преподаватель</label>
+                        <input type="text" class="form-control" id="teacher" name="teacher" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="course" class="form-label">Курс</label>
+                            <input type="number" class="form-control" id="course" name="course" min="1" max="6" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hours" class="form-label">Количество часов</label>
+                            <input type="number" class="form-control" id="hours" name="hours" min="1" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="performance" class="form-label">Успеваемость</label>
+                        <select class="form-select" id="performance" name="performance" required>
+                            <option value="">Выберите...</option>
+                            <option value="Отлично">Отлично</option>
+                            <option value="Хорошо">Хорошо</option>
+                            <option value="Удовлетворительно">Удовлетворительно</option>
+                            <option value="Неудовлетворительно">Неудовлетворительно</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="grade" class="form-label">Оценка (если есть)</label>
+                        <input type="number" class="form-control" id="grade" name="grade" min="2" max="5">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Заметки</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Скрипт отправки формы через AJAX -->
+<script>
+document.getElementById('addDisciplineForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'  // Django CSRF
+        }
+    })
+    .then(response => response.json())
+<!--    .then(data => {-->
+<!--        if (data.success) {-->
+<!--            bootstrap.Modal.getInstance(document.getElementById('addDisciplineModal')).hide();-->
+<!--            location.reload();  // перезагрузка страницы-->
+<!--        } else {-->
+<!--            alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));-->
+<!--        }-->
+<!--    })-->
+    .then(data => {
+        if (data.success) {
+            const modalEl = document.getElementById('addDisciplineModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+
+            // 1. Мгновенно убираем визуальные следы
+            if (modalInstance) {
+                modalInstance._isAnimated = false;           // отключаем анимацию принудительно
+                modalInstance.hide();
+            }
+
+            // 2. Немедленная + повторная очистка (иногда нужно несколько раз)
+            const forceCleanup = () => {
+                document.querySelectorAll('.modal-backdrop, .modal-backdrop.fade').forEach(el => {
+                    el.remove();
+                });
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                document.body.style.position = '';
+                document.body.style.top = '';
+            };
+
+            forceCleanup();                 // сразу
+            setTimeout(forceCleanup, 50);   // через 50 мс
+            setTimeout(forceCleanup, 150);  // через 150 мс — на случай запоздалых стилей
+            setTimeout(forceCleanup, 300);
+
+            // 3. Перезагрузка после самой первой очистки
+            setTimeout(() => {
+                location.reload();
+            }, 80);  // даём браузеру микросекунду на применение стилей
+        } else {
+            alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
+        }
+    })
+});
+</script>
+{% endblock %}

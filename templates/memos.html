@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Памятки для студента{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-sticky-note me-2 text-warning"></i>
+        Памятки для студента
+    </h1>
+    <a href="{% url 'memos:add_memo' %}" class="btn btn-sm btn-outline-primary">
+    <i class="fas fa-plus me-1"></i> Добавить памятку
+    </a>
+</div>
+
+<!-- Сообщения -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+    <!-- Академические -->
+    <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>Академические
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if academic_memos %}
+                    <ul class="list-group list-group-flush">
+                        {% for memo in academic_memos %}
+                            <li class="list-group-item border-0 py-3 d-flex justify-content-between align-items-start">
+                                <span>
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    {{ memo.text }}
+                                </span>
+                                <a href="{% url 'memos:delete_memo' memo.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-book-open fa-2x mb-3 d-block opacity-50"></i>
+                        <p>Академических памяток пока нет</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Бытовые -->
+    <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-home me-2"></i>Бытовые
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if household_memos %}
+                    <ul class="list-group list-group-flush">
+                        {% for memo in household_memos %}
+                            <li class="list-group-item border-0 py-3 d-flex justify-content-between align-items-start">
+                                <span><i class="fas fa-check-circle text-success me-2"></i>{{ memo.text }}</span>
+                                <a href="{% url 'memos:delete_memo' memo.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-house-user fa-2x mb-3 d-block opacity-50"></i>
+                        <p>Бытовых памяток пока нет</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Карьерные + Полезные советы -->
+    <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-briefcase me-2"></i>Карьерные
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if career_memos %}
+                    <ul class="list-group list-group-flush">
+                        {% for memo in career_memos %}
+                            <li class="list-group-item border-0 py-3 d-flex justify-content-between align-items-start">
+                                <span><i class="fas fa-check-circle text-success me-2"></i>{{ memo.text }}</span>
+                                <a href="{% url 'memos:delete_memo' memo.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-briefcase fa-2x mb-3 d-block opacity-50"></i>
+                        <p>Карьерных памяток пока нет</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Блок "Полезные советы" -->
+        <div class="card mt-4 shadow-sm border-0">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Полезные советы
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <h6 class="fw-bold">Учебный процесс:</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success me-2"></i>Создайте расписание и следуйте ему</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Используйте технику Pomodoro</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Не откладывайте задания</li>
+                        </ul>
+                    </div>
+                    <div class="col-12">
+                        <h6 class="fw-bold">Здоровье и баланс:</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success me-2"></i>Спите 7–8 часов</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Питайтесь сбалансированно</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Занимайтесь спортом</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления памятки (если хочешь динамическое добавление) -->
+{% if user.is_authenticated %}
+<div class="modal fade" id="addMemoModal" tabindex="-1" aria-labelledby="addMemoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemoModalLabel">Добавить новую памятку</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'memos:add_memo' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Категория</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="Академические">Академические</option>
+                            <option value="Бытовые">Бытовые</option>
+                            <option value="Карьерные">Карьерные</option>
+                            <option value="Другое">Другое</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="text" class="form-label">Текст памятки</label>
+                        <textarea class="form-control" id="text" name="text" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

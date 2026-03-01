@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Связи и контакты{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-link me-2 text-primary"></i>
+        Связи и контакты
+    </h1>
+    {% if user.is_authenticated %}
+    <div>
+        <a href="{% url 'connections:add_connection' %}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-plus me-1"></i> Добавить связь
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% if connections %}
+    <div class="row g-4">
+        {% for category, items in connections.items %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-gradient-primary text-white d-flex align-items-center">
+                        <i class="fas fa-layer-group me-2"></i>
+                        <h5 class="card-title mb-0">{{ category }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if items %}
+                            <ul class="list-group list-group-flush">
+                                {% for item in items %}
+                                    <li class="list-group-item border-0 py-3 hover-bg-light">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fas fa-circle text-primary me-3 mt-1" style="font-size: 0.6rem;"></i>
+                                            <div>
+                                                {% if item|length > 100 %}
+                                                    {{ item|truncatechars:100 }}...
+                                                {% else %}
+                                                    {{ item }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted text-center py-4 mb-0">
+                                <i class="fas fa-inbox me-2"></i>
+                                В этой категории пока нет записей
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <i class="fas fa-info-circle fa-2x mb-3 d-block"></i>
+                    У вас пока нет сохранённых связей и контактов
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-light border text-center py-5 my-5">
+        <i class="fas fa-network-wired fa-3x text-muted mb-3 d-block"></i>
+        <h4 class="text-muted">Список связей пуст</h4>
+        <p class="lead text-muted">Добавьте важные контакты, преподавателей, одногруппников и другие связи</p>
+        {% if user.is_authenticated %}
+            <a href="#" class="btn btn-primary mt-3">
+                <i class="fas fa-plus me-2"></i>Добавить первую связь
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
+<style>
+    .hover-bg-light:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s ease;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(90deg, #0d6efd 0%, #0b5ed7 100%);
+    }
+</style>
+{% endblock %}

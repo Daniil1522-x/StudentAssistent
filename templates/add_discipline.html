@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить дисциплину{% endblock %}
+
+{% block content %}
+<div class="pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-book me-2"></i>Добавить дисциплину</h1>
+</div>
+
+<div class="col-lg-6">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form method="post" action="{% url 'disciplines:add_discipline' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Название дисциплины</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Преподаватель</label>
+                    <input type="text" name="teacher" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Курс</label>
+                        <input type="number" name="course" class="form-control" min="1" max="6" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Количество часов</label>
+                        <input type="number" name="hours" class="form-control" min="1" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Успеваемость</label>
+                    <select name="performance" class="form-select" required>
+                        <option value="">Выберите...</option>
+                        <option value="отлично">Отлично</option>
+                        <option value="хорошо">Хорошо</option>
+                        <option value="удовлетворительно">Удовлетворительно</option>
+                        <option value="неудовлетворительно">Неудовлетворительно</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Оценка (если есть)</label>
+                    <input type="number" name="grade" class="form-control" min="2" max="5">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Заметки</label>
+                    <textarea name="notes" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Сохранить
+                </button>
+                <a href="{% url 'disciplines:disciplines' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

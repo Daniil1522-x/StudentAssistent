@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить памятку{% endblock %}
+
+{% block content %}
+<div class="pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-sticky-note me-2"></i>Добавить памятку</h1>
+</div>
+
+<div class="col-lg-6">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form method="post" action="{% url 'memos:add_memo' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Категория</label>
+                    <select name="category" class="form-select" required>
+                        <option value="academic">Академические</option>
+                        <option value="household">Бытовые</option>
+                        <option value="career">Карьерные</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Текст памятки</label>
+                    <textarea name="text" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Сохранить
+                </button>
+                <a href="{% url 'memos:memos' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

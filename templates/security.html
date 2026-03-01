@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Безопасность и защита данных{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-shield-alt me-2 text-danger"></i>
+        Безопасность и защита данных
+    </h1>
+</div>
+
+<div class="row g-4">
+    <!-- Левая колонка: меры безопасности + рекомендации -->
+    <div class="col-lg-8">
+        <!-- Реализованные меры -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lock me-2"></i>Меры безопасности приложения
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                    <div>
+                        <h6 class="alert-heading mb-0">Все ключевые меры защиты реализованы</h6>
+                        <small>Ваши данные под надёжной защитой</small>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body text-center">
+                                <i class="fas fa-key fa-3x text-warning mb-3"></i>
+                                <h6 class="card-title">Шифрование паролей</h6>
+                                <p class="small text-muted mb-0">AES-256 с мастер-паролем и PBKDF2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-shield fa-3x text-info mb-3"></i>
+                                <h6 class="card-title">Защита сессий</h6>
+                                <p class="small text-muted mb-0">Безопасное хранение и проверка</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body text-center">
+                                <i class="fas fa-database fa-3x text-success mb-3"></i>
+                                <h6 class="card-title">Локальное хранение</h6>
+                                <p class="small text-muted mb-0">Данные только на вашем устройстве</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body text-center">
+                                <i class="fas fa-ban fa-3x text-danger mb-3"></i>
+                                <h6 class="card-title">Отсутствие трекеров</h6>
+                                <p class="small text-muted mb-0">Нет аналитики и внешних запросов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Рекомендации по безопасности -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Рекомендации по безопасности
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Пароли и доступы</h6>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Надёжный мастер-пароль (12+ символов)</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Никому не сообщайте пароли</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Обновляйте каждые 3–6 месяцев</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Включайте двухфакторную аутентификацию</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Устройство и сеть</h6>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Антивирус и обновления системы</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Регулярные резервные копии</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>VPN в публичных сетях</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Не используйте общественные зарядки без защиты</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка: тех. информация + чек-лист + экстренная помощь -->
+    <div class="col-lg-4">
+        <!-- Техническая информация -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs me-2"></i>Техническая информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="text-nowrap">Версия приложения:</th>
+                            <td>1.0.0</td>
+                        </tr>
+                        <tr>
+                            <th>Тип шифрования:</th>
+                            <td>AES-256 + Fernet</td>
+                        </tr>
+                        <tr>
+                            <th>Хранение данных:</th>
+                            <td>Локальное (зашифровано)</td>
+                        </tr>
+                        <tr>
+                            <th>Требуемые права:</th>
+                            <td>Только чтение/запись файлов</td>
+                        </tr>
+                        <tr>
+                            <th>Сбор данных:</th>
+                            <td>Отсутствует</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Контрольный список -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-tasks me-2"></i>Контрольный список
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check1" checked>
+                    <label class="form-check-label" for="check1">Установлен надёжный мастер-пароль</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check2">
+                    <label class="form-check-label" for="check2">Регулярно обновляю пароли</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check3" checked>
+                    <label class="form-check-label" for="check3">Делаю резервные копии данных</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check4">
+                    <label class="form-check-label" for="check4">Использую антивирусное ПО</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check5">
+                    <label class="form-check-label" for="check5">Не сохраняю пароли в браузере</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экстренная помощь -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-phone-alt me-2"></i>Экстренная помощь
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="small mb-3">
+                    Если подозреваете компрометацию данных:
+                </p>
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-arrow-right me-2 text-danger"></i>Немедленно смените все пароли</li>
+                    <li><i class="fas fa-arrow-right me-2 text-danger"></i>Сообщите в IT-отдел вуза</li>
+                    <li><i class="fas fa-arrow-right me-2 text-danger"></i>Проверьте устройство на вирусы</li>
+                    <li><i class="fas fa-arrow-right me-2 text-danger"></i>Восстановите данные из резервной копии</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+</style>
+
+<script>
+// Анимация чекбоксов
+document.querySelectorAll('.form-check-input').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            this.parentElement.classList.add('text-success', 'fw-bold');
+        } else {
+            this.parentElement.classList.remove('text-success', 'fw-bold');
+        }
+    });
+});
+</script>
+{% endblock %}

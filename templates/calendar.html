@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load calendar_filters %}
+{% block title %}Календарь и расписание{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-calendar-alt me-2"></i>Календарь и расписание</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ prev_url }}" class="btn btn-sm btn-outline-secondary">Предыдущий месяц</a>
+            <a href="{{ next_url }}" class="btn btn-sm btn-outline-secondary">Следующий месяц</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Основной календарь (левая колонка) -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calendar-day me-2"></i>
+                    {{ month_name }}
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mb-0 text-center">
+                        <thead class="calendar-head">
+                            <tr>
+                                <th>Пн</th>
+                                <th>Вт</th>
+                                <th>Ср</th>
+                                <th>Чт</th>
+                                <th>Пт</th>
+                                <th>Сб</th>
+                                <th>Вс</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for week in weeks %}
+                                <tr>
+                                    {% for day in week %}
+                                        <td class="{% if day == today %}bg-primary text-white{% elif forloop.counter >= 6 %}bg-light{% endif %}"
+                                            {% if day != 0 %}style="cursor:pointer;" onclick="window.location='{% url 'calendar:add_event' %}?date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}'"{% endif %}>
+                                            {% if day != 0 %}
+                                                <div class="fw-bold">{{ day }}</div>
+                                                {% for event in events_by_day|get_item:day %}
+                                                    <div class="d-flex align-items-center mt-1">
+                                                        <div class="badge bg-info text-truncate" style="font-size:0.65rem; max-width:70%;">{{ event.title }}</div>
+                                                        <a href="{% url 'calendar:delete_event' event.id %}" class="ms-1 text-danger" style="font-size:0.7rem;" onclick="event.stopPropagation();">✕</a>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка: важные даты, сессии, каникулы -->
+    <div class="col-lg-4">
+        <!-- Важные даты -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-circle me-2"></i>Важные даты
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if important_dates %}
+                    <ul class="list-group list-group-flush">
+                        {% for date in important_dates %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <i class="fas fa-calendar-day text-warning me-2"></i>
+                                    {{ date.title }}<br>
+                                    <small class="text-muted">{{ date.date|date:"d.m.Y" }}</small>
+                                </div>
+                                <a href="{% url 'calendar:delete_event' date.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                <p class="text-muted text-center py-4">Нет важных дат на данный момент</p>
+            {% endif %}
+            </div>
+        </div>
+
+        <!-- Периоды сессий -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>Периоды сессий
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if session_periods %}
+                    <ul class="list-group list-group-flush">
+                        {% for session in session_periods %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <i class="fas fa-chalkboard-teacher text-info me-2"></i>
+                                    {{ session.title }}<br>
+                                    <small class="text-muted">{{ session.date|date:"d.m.Y" }}</small>
+                                </div>
+                                <a href="{% url 'calendar:delete_event' session.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted text-center py-4">Нет данных о сессиях</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Каникулы -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-umbrella-beach me-2"></i>Каникулы
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if rest_periods %}
+                    <ul class="list-group list-group-flush">
+                        {% for rest in rest_periods %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <i class="fas fa-snowflake text-success me-2"></i>
+                                    {{ rest.title }}<br>
+                                    <small class="text-muted">{{ rest.date|date:"d.m.Y" }}</small>
+                                </div>
+                                <a href="{% url 'calendar:delete_event' rest.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted text-center py-4">Нет данных о каникулах</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.calendar-head th {
+    background-color: var(--bg-sidebar);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+[data-theme="dark"] td:hover {
+    background-color: rgba(79, 142, 247, 0.2) !important;
+    color: var(--text-main) !important;
+    cursor: pointer;
+}
+[data-theme="dark"] .bg-light {
+    background-color: rgba(255,255,255,0.03) !important;
+}
+</style>
+
+{% endblock %}

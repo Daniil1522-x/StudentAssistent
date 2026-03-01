@@ -28,3 +28,11 @@ staticfiles/
 
 # Virtual Environment
 .venv/
+
+
+*.pyc
+*.pyo
+
+.env
+
+.DS_Store
