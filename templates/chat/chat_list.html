@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Чаты{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-comments me-2"></i>Чаты</h1>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Создать чат</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" name="name" class="form-control" placeholder="Название чата" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-plus me-2"></i>Создать
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">Все чаты</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if rooms %}
+                    <ul class="list-group list-group-flush">
+                        {% for room in rooms %}
+                            <a href="{% url 'chat:chat_room' room.name %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-hashtag me-2 text-primary"></i>{{ room.name }}</span>
+                                <small class="text-muted">{{ room.created_at|date:"d.m.Y" }}</small>
+                            </a>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-comments fa-3x mb-3 opacity-50"></i>
+                        <p>Чатов пока нет — создайте первый</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

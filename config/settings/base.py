@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     # Сторонние пакеты (добавляй по мере необходимости)
     # 'debug_toolbar',           # только в dev
     'django_htmx',             # если используешь HTMX
@@ -40,7 +41,17 @@ INSTALLED_APPS = [
     'apps.university',
     'apps.security',           # пароли + безопасность
     'apps.common',             # общие утилиты, контекст-процессоры
+    'apps.chat',
 ]
+
+# Django Channels
+ASGI_APPLICATION = 'config.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Кастомная модель пользователя (если используешь)
 AUTH_USER_MODEL = 'accounts.User'  # ← раскомментируй, если создал свою модель User

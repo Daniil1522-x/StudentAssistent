@@ -29,6 +29,7 @@ urlpatterns = [
     path('security/', include('apps.security.urls')),
     path('university-info/', include('apps.university.urls')),
     path('sources/', include('apps.sources.urls')),
+    path('chat/', include('apps.chat.urls')),
 ]
 
 if settings.DEBUG:
