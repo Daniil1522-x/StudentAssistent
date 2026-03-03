@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']  # '*' только для те�
 # Debug Toolbar — только в DEBUG-режиме
 # ────────────────────────────────────────────────
 INSTALLED_APPS += [
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
 
 INTERNAL_IPS = [
@@ -28,7 +28,7 @@ INTERNAL_IPS = [
 ]
 
 MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 # ────────────────────────────────────────────────

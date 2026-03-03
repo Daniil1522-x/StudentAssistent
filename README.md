@@ -2,6 +2,10 @@
 python manage.py runserver 
 daphne -p 8000 config.asgi:application
 
+git add .
+git commit --no-verify -m "The finished version"
+git push
+
 
 # 🎓 Студенческий Помощник
 
