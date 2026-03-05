@@ -10,6 +10,15 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*.pyc
+*.pyo
+.idea/
+passwords.txt
+
+.env
+
+.DS_Store
+
 
 # IDE
 .vscode/
@@ -30,9 +39,5 @@ staticfiles/
 .venv/
 
 
-*.pyc
-*.pyo
 
-.env
 
-.DS_Store
