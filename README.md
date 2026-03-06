@@ -1,17 +1,3 @@
-.venv/Scripts/activate 
-daphne -p 8000 config.asgi:application
-
-python manage.py collectstatic
-daphne -p 8000 config.asgi:application
-
-python manage.py runserver 
-daphne -p 8000 config.asgi:application
-
-git add .
-git commit --no-verify -m "The finished version"
-git push
-
-
 # 🎓 Студенческий Помощник
 
 > Персональный веб-ассистент для организации учебного процесса студента.  
@@ -32,8 +18,6 @@ git push
 | Чат | Пароли |
 |:---:|:---:|
 | ![Чат](screenshots/chat.png) | ![Пароли](screenshots/passwords.png) |
-
-> 📁 Добавьте скриншоты в папку `screenshots/` в корне проекта
 
 ---
 
