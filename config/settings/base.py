@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.security',           # пароли + безопасность
     'apps.common',             # общие утилиты, контекст-процессоры
     'apps.chat',
+    'apps.events',
 ]
 
 # Django Channels
@@ -61,6 +62,7 @@ AUTH_USER_MODEL = 'accounts.User'  # ← раскомментируй, если 
 # ────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,6 +71,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',  # для HTMX
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ────────────────────────────────────────────────
 # База данных (по умолчанию SQLite — удобно для старта)

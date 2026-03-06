@@ -1,4 +1,9 @@
 .venv/Scripts/activate 
+daphne -p 8000 config.asgi:application
+
+python manage.py collectstatic
+daphne -p 8000 config.asgi:application
+
 python manage.py runserver 
 daphne -p 8000 config.asgi:application
 
