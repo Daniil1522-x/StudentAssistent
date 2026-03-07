@@ -1,15 +1,14 @@
 import json
+import re
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import ChatRoom, Message
-import re
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        # Оставляем только ASCII символы для group name
         safe_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', self.room_name)
         self.room_group_name = f'chat_{safe_name}'
 
@@ -36,8 +35,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data['message']
         user = self.scope['user']
+
+        # Проверка авторизации
+        if not user.is_authenticated:
+            await self.close()
+            return
+
+        # Валидация сообщения
+        message = data.get('message', '').strip()
+        if not message:
+            return
 
         await self.save_message(user, message)
 
