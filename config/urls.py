@@ -2,12 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views  # Добавь этот импорт
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # ✅ ЯВНО подключаем стандартную авторизацию ДО accounts/
     path('accounts/login/', auth_views.LoginView.as_view(
         template_name='registration/login.html'
     ), name='login'),
@@ -20,8 +19,7 @@ urlpatterns = [
     path('', include('apps.events.urls')),
 
 
-    # Все остальные приложения
-    path('accounts/', include('apps.accounts.urls')),  # Теперь это не перезатрёт login/logout
+    path('accounts/', include('apps.accounts.urls')),
     path('disciplines/', include('apps.disciplines.urls')),
     path('connections/', include('apps.connections.urls')),
     path('calendar/', include('apps.calendar_app.urls')),

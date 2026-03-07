@@ -308,19 +308,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-cryptography"
-version = "1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cryptography" },
-    { name = "django" },
-    { name = "django-appconf" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/ba/d5e1264c60a86cebb4b63f1dae8220e15dd751e46d24229ee0803f19a66b/django_cryptography-1.1-py2.py3-none-any.whl", hash = "sha256:93702fcf0d75865d55362f20ecd95274c4eef60ccdce46cbdade0420acee07cb", size = 11107, upload-time = "2022-04-06T04:27:28.34Z" },
-]
-
-[[package]]
 name = "django-cryptography-5"
 version = "2.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -334,29 +321,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/ae/8b/214ea0d3726eeb996
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f3/a6/5dd7c0fc1e4af6db2df1fb779e271059d7a942039bf82670924c08d37dfb/django_cryptography_5-2.0.3-py2.py3-none-any.whl", hash = "sha256:0f53a688e111c1b015475a80c54d74d5c84b62ffbaba50577cb767dd2fc9c1c3", size = 13321, upload-time = "2025-01-28T12:14:48.12Z" },
 ]
-
-[[package]]
-name = "django-debug-toolbar"
-version = "6.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "sqlparse" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/4d/6acf660500d3d581bfc19460d9605cdf14c275640f35825da1329eaafafa/django_debug_toolbar-6.2.0.tar.gz", hash = "sha256:dc1c174d8fb0ea01435e02d9ceef735cf62daf37c1a6a5692d33b4127327679b", size = 313779, upload-time = "2026-01-20T12:38:25.268Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/04/e24611299a5ee0d4edfacf935b09cfb7d5d9cb653bd7b7883c3b43a6f90d/django_debug_toolbar-6.2.0-py3-none-any.whl", hash = "sha256:1575461954e6befa720e999dec13fe4f1cc8baf40b6c3ac2aec5f340c0f9c85f", size = 271354, upload-time = "2026-01-20T12:38:23.608Z" },
-]
-
-[[package]]
-name = "django-fernet-fields"
-version = "0.6"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cryptography" },
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/31/2a/012a6777a8d95ccb7033263a77cba098b123bece9d9dace8a258552a1014/django-fernet-fields-0.6.tar.gz", hash = "sha256:7f7e03c86d9473a42031ebade2b15be1484aad18ef5576ddab156c4667e04c4a", size = 6742, upload-time = "2019-05-10T16:38:10.665Z" }
 
 [[package]]
 name = "django-htmx"
@@ -828,10 +792,7 @@ dependencies = [
     { name = "channels" },
     { name = "daphne" },
     { name = "django" },
-    { name = "django-cryptography" },
     { name = "django-cryptography-5" },
-    { name = "django-debug-toolbar" },
-    { name = "django-fernet-fields" },
     { name = "django-htmx" },
     { name = "django-tailwind-cli" },
     { name = "pillow" },
@@ -850,10 +811,7 @@ requires-dist = [
     { name = "channels", specifier = ">=4.3.2" },
     { name = "daphne", specifier = ">=4.2.1" },
     { name = "django", specifier = ">=6.0.2" },
-    { name = "django-cryptography", specifier = ">=1.1" },
     { name = "django-cryptography-5", specifier = ">=2.0.3" },
-    { name = "django-debug-toolbar", specifier = ">=6.2.0" },
-    { name = "django-fernet-fields", specifier = ">=0.6" },
     { name = "django-htmx", specifier = ">=1.27.0" },
     { name = "django-tailwind-cli", specifier = ">=4.5.1" },
     { name = "pillow", specifier = ">=12.1.1" },

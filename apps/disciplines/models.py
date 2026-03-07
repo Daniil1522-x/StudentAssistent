@@ -1,6 +1,5 @@
-# apps/disciplines/models.py (или где лежит Discipline)
 from django.db import models
-from django.conf import settings   # ← добавляем этот импорт
+from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
@@ -13,7 +12,7 @@ class Discipline(models.Model):
     ]
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,               # ← вот это главное изменение
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='disciplines'
     )
