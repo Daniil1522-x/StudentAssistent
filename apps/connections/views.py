@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+
+from .forms import ConnectionForm
 from .models import Connection
 
 
@@ -18,9 +20,11 @@ def connections(request):
 @login_required
 def add_connection(request):
     if request.method == 'POST':
-        category = request.POST.get('category')
-        text = request.POST.get('text')
-        if category and text:
-            Connection.objects.create(user=request.user, category=category, text=text)
-        return redirect('connections:connections')
-    return render(request, 'add_connection.html', {})
+        form = ConnectionForm(request.POST)
+        if form.is_valid():
+            connection = form.save(commit=False)
+            connection.user = request.user
+            connection.save()
+            return redirect('connections:connections')
+        return render(request, 'add_connection.html', {'form': form})
+    return render(request, 'add_connection.html', {'form': ConnectionForm()})

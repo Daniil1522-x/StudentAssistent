@@ -1,7 +1,9 @@
 import calendar as cal_module
 from datetime import date
+
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+
 from .models import Event
 
 

@@ -1,38 +1,45 @@
 ﻿# Python
 __pycache__/
 *.py[cod]
-*.class
+*$py.class
 *.so
 .Python
-env/
-venv/
-.venv/
-ENV/
-env.bak/
-venv.bak/
+*.egg-info/
+dist/
+build/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment & secrets
+.env
+passwords.txt
 
 # Django
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media/
 staticfiles/
 
-# Virtual Environment
-.venv/
+# Media (оставляем только .gitkeep)
+media/*
+!media/.gitkeep
 
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
-*.pyc
-*.pyo
-
-.env
-
+# OS
 .DS_Store
+Thumbs.db
+
+# Archives / local junk
+manage.zip
+*.zip

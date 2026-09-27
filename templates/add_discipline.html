@@ -12,41 +12,51 @@
         <div class="card-body">
             <form method="post" action="{% url 'disciplines:add_discipline' %}">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
                 <div class="mb-3">
                     <label class="form-label fw-bold">Название дисциплины</label>
-                    <input type="text" name="name" class="form-control" required>
+                    <input type="text" name="name" class="form-control" value="{{ form.name.value|default_if_none:'' }}" required>
+                    {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Преподаватель</label>
-                    <input type="text" name="teacher" class="form-control" required>
+                    <input type="text" name="teacher" class="form-control" value="{{ form.teacher.value|default_if_none:'' }}" required>
+                    {% if form.teacher.errors %}<div class="text-danger small mt-1">{{ form.teacher.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Курс</label>
-                        <input type="number" name="course" class="form-control" min="1" max="6" required>
+                        <input type="number" name="course" class="form-control" value="{{ form.course.value|default_if_none:'' }}" min="1" max="6" required>
+                        {% if form.course.errors %}<div class="text-danger small mt-1">{{ form.course.errors|join:", " }}</div>{% endif %}
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Количество часов</label>
-                        <input type="number" name="hours" class="form-control" min="1" required>
+                        <input type="number" name="hours" class="form-control" value="{{ form.hours.value|default_if_none:'' }}" min="1" required>
+                        {% if form.hours.errors %}<div class="text-danger small mt-1">{{ form.hours.errors|join:", " }}</div>{% endif %}
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Успеваемость</label>
                     <select name="performance" class="form-select" required>
                         <option value="">Выберите...</option>
-                        <option value="отлично">Отлично</option>
-                        <option value="хорошо">Хорошо</option>
-                        <option value="удовлетворительно">Удовлетворительно</option>
-                        <option value="неудовлетворительно">Неудовлетворительно</option>
+                        <option value="отлично" {% if form.performance.value == 'отлично' %}selected{% endif %}>Отлично</option>
+                        <option value="хорошо" {% if form.performance.value == 'хорошо' %}selected{% endif %}>Хорошо</option>
+                        <option value="удовлетворительно" {% if form.performance.value == 'удовлетворительно' %}selected{% endif %}>Удовлетворительно</option>
+                        <option value="неудовлетворительно" {% if form.performance.value == 'неудовлетворительно' %}selected{% endif %}>Неудовлетворительно</option>
                     </select>
+                    {% if form.performance.errors %}<div class="text-danger small mt-1">{{ form.performance.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Оценка (если есть)</label>
-                    <input type="number" name="grade" class="form-control" min="2" max="5">
+                    <input type="number" name="grade" class="form-control" value="{{ form.grade.value|default_if_none:'' }}" min="2" max="5">
+                    {% if form.grade.errors %}<div class="text-danger small mt-1">{{ form.grade.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Заметки</label>
-                    <textarea name="notes" class="form-control" rows="3"></textarea>
+                    <textarea name="notes" class="form-control" rows="3">{{ form.notes.value|default_if_none:'' }}</textarea>
+                    {% if form.notes.errors %}<div class="text-danger small mt-1">{{ form.notes.errors|join:", " }}</div>{% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Сохранить

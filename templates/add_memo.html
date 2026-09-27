@@ -12,17 +12,22 @@
         <div class="card-body">
             <form method="post" action="{% url 'memos:add_memo' %}">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
                 <div class="mb-3">
                     <label class="form-label fw-bold">Категория</label>
                     <select name="category" class="form-select" required>
-                        <option value="academic">Академические</option>
-                        <option value="household">Бытовые</option>
-                        <option value="career">Карьерные</option>
+                        <option value="academic" {% if form.category.value == 'academic' %}selected{% endif %}>Академические</option>
+                        <option value="household" {% if form.category.value == 'household' %}selected{% endif %}>Бытовые</option>
+                        <option value="career" {% if form.category.value == 'career' %}selected{% endif %}>Карьерные</option>
                     </select>
+                    {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Текст памятки</label>
-                    <textarea name="text" class="form-control" rows="4" required></textarea>
+                    <textarea name="text" class="form-control" rows="4" required>{{ form.text.value|default_if_none:'' }}</textarea>
+                    {% if form.text.errors %}<div class="text-danger small mt-1">{{ form.text.errors|join:", " }}</div>{% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Сохранить

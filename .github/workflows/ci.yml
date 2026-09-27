@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync
+      - run: uv run ruff check .
+
+  # Быстрый прогон на SQLite — то же самое, что и локальная разработка
+  # (config.settings.dev). Не требует внешних сервисов.
+  test-sqlite:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      # Ключи ниже — одноразовые, только для CI, никогда не используются
+      # для реальных данных. Не путать с настоящими секретами из .env.
+      SECRET_KEY: R-yYSjJMrbk05ZtHdmCCiD29Blzjg6QUl6j42oZTWDPdZ6bx5TsfSUhCK6B3HP_QD0Q
+      FERNET_KEY: oQqc9aADMBfIqPhy-LFqqOuiEGdTKrmzRS7BMdTzthM=
+      DEBUG: 'True'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync
+      - run: uv run python manage.py test
+
+  # Прогон против реального PostgreSQL + Redis — ловит то, что SQLite не
+  # может: совместимость миграций с Postgres, реальную доступность
+  # Redis-канала для чата, полноту env-переменных прод-конфига. Это
+  # единственная часть CI, которую нельзя было проверить в песочнице при
+  # разработке (там не было сетевого доступа к Postgres/Redis).
+  test-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: studentassistent
+          POSTGRES_USER: studentassistent
+          POSTGRES_PASSWORD: ci-only-password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SECRET_KEY: R-yYSjJMrbk05ZtHdmCCiD29Blzjg6QUl6j42oZTWDPdZ6bx5TsfSUhCK6B3HP_QD0Q
+      FERNET_KEY: oQqc9aADMBfIqPhy-LFqqOuiEGdTKrmzRS7BMdTzthM=
+      DEBUG: 'False'
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CSRF_TRUSTED_ORIGINS: https://localhost
+      DB_NAME: studentassistent
+      DB_USER: studentassistent
+      DB_PASSWORD: ci-only-password
+      DB_HOST: localhost
+      DB_PORT: 5432
+      REDIS_URL: redis://localhost:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync
+      # Настоящий, непеределанный prod.py — проверяем, что deploy-чеклист
+      # чист (SSL/HSTS/cookies/ALLOWED_HOSTS и т.д.).
+      - run: uv run python manage.py check --deploy
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.prod
+      # config.settings.ci = prod.py с единственным отличием — выключенный
+      # SECURE_SSL_REDIRECT, иначе тестовый клиент Django (работает по
+      # обычному HTTP) получал бы 301 на каждый запрос. См. комментарий в
+      # самом файле config/settings/ci.py.
+      - run: uv run python manage.py migrate
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.ci
+      - run: uv run python manage.py test
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.ci

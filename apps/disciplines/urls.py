@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import disciplines, add_discipline
+
+from .views import add_discipline, disciplines
 
 app_name = 'disciplines'
 

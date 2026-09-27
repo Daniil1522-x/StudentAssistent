@@ -12,25 +12,32 @@
         <div class="card-body">
             <form method="post" action="{% url 'security:add_account' %}">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
                 <div class="mb-3">
                     <label class="form-label fw-bold">Название сервиса / сайта</label>
-                    <input type="text" name="service" class="form-control" required>
+                    <input type="text" name="service" class="form-control" value="{{ form.service.value|default_if_none:'' }}" required>
+                    {% if form.service.errors %}<div class="text-danger small mt-1">{{ form.service.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Логин / Email</label>
-                    <input type="text" name="login" class="form-control" required>
+                    <input type="text" name="login" class="form-control" value="{{ form.login.value|default_if_none:'' }}" required>
+                    {% if form.login.errors %}<div class="text-danger small mt-1">{{ form.login.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Пароль</label>
                     <input type="password" name="password" class="form-control" required>
+                    {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">URL (необязательно)</label>
-                    <input type="url" name="url" class="form-control" placeholder="https://example.com">
+                    <input type="url" name="url" class="form-control" value="{{ form.url.value|default_if_none:'' }}" placeholder="https://example.com">
+                    {% if form.url.errors %}<div class="text-danger small mt-1">{{ form.url.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Заметки</label>
-                    <textarea name="notes" class="form-control" rows="2"></textarea>
+                    <textarea name="notes" class="form-control" rows="2">{{ form.notes.value|default_if_none:'' }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Сохранить

@@ -6,12 +6,15 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "channels>=4.3.2",
+    "channels-redis>=4.2.1",
+    "daphne>=4.2.1",
     "django>=6.0.2",
     "django-debug-toolbar>=6.2.0",
-    "django-fernet-fields>=0.6",
     "django-htmx>=1.27.0",
-    "django-tailwind-cli>=4.5.1",
     "pillow>=12.1.1",
+    "psycopg[binary]>=3.2",
+    "python-decouple>=3.8",
+    "whitenoise>=6.12.0",
 ]
 
 [dependency-groups]
@@ -19,3 +22,18 @@ dev = [
     "pre-commit>=4.5.1",
     "ruff>=0.15.2",
 ]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+# Отправная точка — собственные дефолтные правила ruff (E4/E7/E9/F) плюс I
+# (сортировка импортов). Сознательно не включаем более шумные/агрессивные
+# наборы (RUF012 — массово ложноположительный на полях Django-моделей;
+# BLE/S/DTZ/SIM/B — потребовали бы правки try/except и datetime по всему
+# проекту без отдельного обсуждения) — это отдельная задача, не часть
+# настройки CI.
+select = ["E4", "E7", "E9", "F", "I"]
+# F403/F405 отключены точечно: `from .base import *` в dev.py/prod.py —
+# стандартный, намеренный паттерн Django split-settings, а не ошибка.
+ignore = ["F403", "F405"]

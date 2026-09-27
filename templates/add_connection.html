@@ -12,13 +12,18 @@
         <div class="card-body">
             <form method="post" action="{% url 'connections:add_connection' %}">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
                 <div class="mb-3">
                     <label class="form-label fw-bold">Категория</label>
-                    <input type="text" name="category" class="form-control" required>
+                    <input type="text" name="category" class="form-control" value="{{ form.category.value|default_if_none:'' }}" required>
+                    {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors|join:", " }}</div>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Описание</label>
-                    <textarea name="text" class="form-control" rows="3" required></textarea>
+                    <textarea name="text" class="form-control" rows="3" required>{{ form.text.value|default_if_none:'' }}</textarea>
+                    {% if form.text.errors %}<div class="text-danger small mt-1">{{ form.text.errors|join:", " }}</div>{% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Сохранить

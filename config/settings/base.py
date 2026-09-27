@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from decouple import config
 
 # ────────────────────────────────────────────────
@@ -9,11 +10,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # ────────────────────────────────────────────────
 # Основные настройки (переопределяются в dev.py / prod.py)
 # ────────────────────────────────────────────────
-SECRET_KEY = config('SECRET_KEY') # ← поменяй в prod!
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = config('DEBUG', default=False, cast=bool)  # ← обязательно False в base! В dev.py ставим True
+# Отдельный ключ шифрования для apps.security.EncryptedField (Fernet).
+# Намеренно НЕ выводится из SECRET_KEY: смена/утечка одного ключа не должна
+# автоматически компрометировать/ломать другой.
+# Сгенерировать: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+FERNET_KEY = config('FERNET_KEY')
 
-ALLOWED_HOSTS = []  # ← в dev.py ставим ['*'] или конкретные хосты
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ALLOWED_HOSTS = []
 
 # ────────────────────────────────────────────────
 # Приложения
@@ -26,12 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_htmx',
 
-    # Сторонние пакеты (добавляй по мере необходимости)
-    # 'debug_toolbar',           # только в dev
-    'django_htmx',             # если используешь HTMX
-
-    # Твои приложения (все в apps/)
     'apps.accounts',
     'apps.disciplines',
     'apps.connections',
@@ -39,9 +42,10 @@ INSTALLED_APPS = [
     'apps.calendar_app',
     'apps.memos',
     'apps.university',
-    'apps.security',           # пароли + безопасность
-    'apps.common',             # общие утилиты, контекст-процессоры
+    'apps.security',
+    'apps.common',
     'apps.chat',
+    'apps.dashboard',
 ]
 
 # Django Channels
@@ -53,22 +57,24 @@ CHANNEL_LAYERS = {
     }
 }
 
-# Кастомная модель пользователя (если используешь)
-AUTH_USER_MODEL = 'accounts.User'  # ← раскомментируй, если создал свою модель User
 
+AUTH_USER_MODEL = 'accounts.User'
 # ────────────────────────────────────────────────
 # Middleware (общие для всех сред)
 # ────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_htmx.middleware.HtmxMiddleware',  # для HTMX
+    'django_htmx.middleware.HtmxMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ────────────────────────────────────────────────
 # База данных (по умолчанию SQLite — удобно для старта)
@@ -84,8 +90,8 @@ DATABASES = {
 # Статические файлы (CSS, JS, изображения)
 # ────────────────────────────────────────────────
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']           # исходники (src/)
-STATIC_ROOT = BASE_DIR / 'staticfiles'             # для collectstatic в проде
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # ────────────────────────────────────────────────
 # Медиа (загруженные файлы: аватарки, фото событий)
@@ -99,7 +105,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],              # глобальные шаблоны
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,8 +113,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # Если добавишь свой процессор (например для темы)
-                # 'apps.common.context_processors.theme_settings',
+
             ],
         },
     },
@@ -123,9 +128,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ────────────────────────────────────────────────
 # Логин / редиректы (стандартные)
 # ────────────────────────────────────────────────
-LOGIN_REDIRECT_URL = '/'               # после логина — на главную
-LOGOUT_REDIRECT_URL = '/accounts/login/'  # после выхода — на логин
-LOGIN_URL = '/accounts/login/'         # куда редиректит @login_required
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/login/'
 
 # ────────────────────────────────────────────────
 # Безопасность (в проде усиливай!)

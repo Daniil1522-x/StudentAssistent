@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 def sources(request):
     sources_data = {
         "Группа ВК": ["https://vk.com/your_university_group"],

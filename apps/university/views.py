@@ -1,5 +1,5 @@
-# apps/university/views.py
 from django.shortcuts import render
+
 
 def university_info(request):
 

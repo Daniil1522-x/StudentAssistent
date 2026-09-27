@@ -1,11 +1,10 @@
 # apps/accounts/views.py
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 
 User = get_user_model()
 
@@ -20,7 +19,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('events:home')
+            return redirect('dashboard:home')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
