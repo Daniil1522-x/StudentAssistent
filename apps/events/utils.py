@@ -26,7 +26,7 @@ def generate_calendar_data():
             f"Летние каникулы: 26.06.{academic_year_end} - 31.08.{academic_year_end}",
             f"Осенние каникулы: 01.11.{academic_year_start} - 07.11.{academic_year_start}"
         ],
-        "payment_deadline": f"Крайний срок оплаты: 10 числа каждого месяца",
+        "payment_deadline": "Крайний срок оплаты: 10 числа каждого месяца",
         "important_dates": [
             f"День знаний: 01.09.{academic_year_start}",
             f"День университета: 15.10.{academic_year_start}",

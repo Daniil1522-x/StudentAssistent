@@ -1,6 +1,7 @@
 # apps/events/views.py
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
 # from .utils import generate_calendar_data
 
 
